@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && esbuild ./tsBuild/index.js --bundle --outfile=./build/index.js"
+    "build": "npx tsc && npx esbuild ./tsBuild/index.js --bundle --outfile=./build/index.js --minify",
+    "build:watch": "npx tsc-watch --onSuccess \"npx esbuild ./tsBuild/index.js --bundle --outfile=./build/index.js\""
   },
   "repository": {
     "type": "git",

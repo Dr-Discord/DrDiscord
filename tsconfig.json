@@ -4,8 +4,9 @@
     "target": "ESNext",
     "module": "commonjs",
     "lib": [
-      "es6",
-      "dom"
+      "es7",
+      "dom",
+      "ESNext"
     ],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

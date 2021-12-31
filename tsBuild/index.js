@@ -29,11 +29,12 @@ const patch_1 = __importDefault(require("./patch"));
 const React_1 = require("./React");
 const Util = __importStar(require("./Util"));
 const PanelButton_1 = __importDefault(require("./ui/PanelButton"));
+const i18n_1 = __importDefault(require("./i18n"));
 window.$Dr = {
-    localStorage: Storage_1.localStorage, StorageApi: Storage_1.StorageApi, InternalStorageApi: Storage_1.InternalStorageApi, getModule: getModule_1.default, ReactDOM: React_1.ReactDOM, React: React_1.React, Modal: Modal_1.default, patch: patch_1.default, Util
+    localStorage: Storage_1.localStorage, StorageApi: Storage_1.StorageApi, InternalStorageApi: Storage_1.InternalStorageApi, getModule: getModule_1.default, ReactDOM: React_1.ReactDOM, React: React_1.React, Modal: Modal_1.default, patch: patch_1.default, Util, i18n: i18n_1.default
 };
 window.DrApi = {
-    Storage: Storage_1.StorageApi, getModule: getModule_1.default, ReactDOM: React_1.ReactDOM, React: React_1.React, Modal: Modal_1.default, patch: patch_1.default, Util
+    Storage: Storage_1.StorageApi, getModule: getModule_1.default, ReactDOM: React_1.ReactDOM, React: React_1.React, Modal: Modal_1.default, patch: patch_1.default, Util, i18n: i18n_1.default
 };
 async function start() {
     const eleOI = Util.getOwnerInstance(await Util.waitFor(".panels-j1Uci_ > .container-3baos1"));

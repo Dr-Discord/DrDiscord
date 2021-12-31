@@ -10,12 +10,14 @@ import * as Util from "./Util"
 
 import PanelButton from "./ui/PanelButton"
 
+import i18n from "./i18n"
+
 window.$Dr = {
-  localStorage, StorageApi, InternalStorageApi, getModule, ReactDOM, React, Modal, patch, Util
+  localStorage, StorageApi, InternalStorageApi, getModule, ReactDOM, React, Modal, patch, Util, i18n
 }
 
 window.DrApi = {
-  Storage: StorageApi, getModule, ReactDOM, React, Modal, patch, Util
+  Storage: StorageApi, getModule, ReactDOM, React, Modal, patch, Util, i18n
 }
 
 async function start() {
