@@ -12,12 +12,14 @@ import PanelButton from "./ui/PanelButton"
 
 import i18n from "./i18n"
 
+import MonacoEditor from "./ui/MonacoEditor"
+
 window.$Dr = {
-  localStorage, StorageApi, InternalStorageApi, getModule, ReactDOM, React, Modal, patch, Util, i18n
+  localStorage, StorageApi, InternalStorageApi, getModule, ReactDOM, React, Modal, patch, Util, i18n, MonacoEditor
 }
 
 window.DrApi = {
-  Storage: StorageApi, getModule, ReactDOM, React, Modal, patch, Util, i18n
+  Storage: StorageApi, getModule, ReactDOM, React, Modal, patch, Util, MonacoEditor
 }
 
 async function start() {

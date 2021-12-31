@@ -401,6 +401,36 @@
     }
   });
 
+  // tsBuild/ui/MonacoEditor.js
+  var require_MonacoEditor = __commonJS({
+    "tsBuild/ui/MonacoEditor.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", { value: true });
+      exports.MonacoEditor = void 0;
+      var React_1 = require_React();
+      var MonacoEditor = class extends React_1.React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { error: false };
+          this.myRef = React_1.React.createRef();
+        }
+        componentDidMount() {
+          const propKeys = Object.keys(this.props).filter((key) => key !== "didMount");
+          const props = {};
+          for (const propKey of propKeys)
+            props[propKey] = this.props[propKey];
+          this.editor = window.monaco.editor.create(this.myRef.current, props);
+          this.props.didMount?.(this.editor);
+        }
+        render() {
+          return React_1.React.createElement("div", { ref: this.myRef, style: { width: "100%", height: "100%" } });
+        }
+      };
+      exports.MonacoEditor = MonacoEditor;
+      exports.default = MonacoEditor;
+    }
+  });
+
   // tsBuild/index.js
   var require_tsBuild = __commonJS({
     "tsBuild/index.js"(exports) {
@@ -445,6 +475,7 @@
       var Util = __importStar(require_Util());
       var PanelButton_1 = __importDefault(require_PanelButton());
       var i18n_1 = __importDefault(require_i18n());
+      var MonacoEditor_1 = __importDefault(require_MonacoEditor());
       window.$Dr = {
         localStorage: Storage_1.localStorage,
         StorageApi: Storage_1.StorageApi,
@@ -455,7 +486,8 @@
         Modal: Modal_1.default,
         patch: patch_1.default,
         Util,
-        i18n: i18n_1.default
+        i18n: i18n_1.default,
+        MonacoEditor: MonacoEditor_1.default
       };
       window.DrApi = {
         Storage: Storage_1.StorageApi,
@@ -465,7 +497,7 @@
         Modal: Modal_1.default,
         patch: patch_1.default,
         Util,
-        i18n: i18n_1.default
+        MonacoEditor: MonacoEditor_1.default
       };
       async function start() {
         const eleOI = Util.getOwnerInstance(await Util.waitFor(".panels-j1Uci_ > .container-3baos1"));

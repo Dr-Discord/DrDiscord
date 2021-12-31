@@ -85,7 +85,7 @@ export default {
    * @param {object} options 
    * @returns {string} modal key
    */
-  showConfirmationModal: (title:string, content:Array<string>, options:any = {}):string => {
+  showConfirmationModal: (title:string, content:Array<any>, options:any = {}):string => {
     const emptyFunction = () => {}
     const { 
       onConfirm = emptyFunction, onCancel = emptyFunction, 
