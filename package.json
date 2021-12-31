@@ -1,26 +1,23 @@
 {
-  "name": "discord_re-envisioned",
+  "name": "drdiscord",
   "version": "1.0.0",
-  "description": "A discord client mod to allow the user to add plugins and themes to discord",
+  "description": "A simple client mod",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "node ./installation.js --install",
-    "uninstall": "node ./installation.js --uninstall",
-    "update": "npm i && git stash && git pull"
+    "build": "tsc && esbuild ./tsBuild/index.js --bundle --outfile=./build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dr-Discord/DrDiscord.git"
   },
   "author": "Doggybootsy",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dr-Discord/DrDiscord/issues"
+  },
+  "homepage": "https://github.com/Dr-Discord/DrDiscord#readme",
   "dependencies": {
-    "sass": "^1.44.0",
-    "sucrase": "^3.20.3"
-  },
-  "devDependencies": {
-    "electron-devtools-installer": "^3.2.0"
-  },
-  "info": {
-    "name": "Discord Re-envisioned",
-    "nameShort": "DrDiscord",
-    "version": "1.0.2"
+    "@types/react": "^17.0.38"
   }
 }
