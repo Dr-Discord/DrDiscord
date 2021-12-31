@@ -3,6 +3,9 @@ import {
   React
 } from "../React"
 import i18n from "../i18n"
+import Modal from "../Modal"
+
+import SettingsModal from "./SettingsModal"
 
 const PanelButton = getModule("PanelButton").default
 const { openContextMenu, closeContextMenu } = getModule(["openContextMenu"])
@@ -10,20 +13,22 @@ const Menu = getModule(["MenuItem"])
 const Discord = getModule("Discord").default
 
 export const Context = React.memo(() => {
-  <Menu.default
-    onClose={closeContextMenu}
-    navId="DrApi-context-menu"
-  >
-    <Menu.MenuItem
-      id="settings"
-      label={i18n.settings}
-    ></Menu.MenuItem>
-    <Menu.MenuSeparator />
-    <Menu.MenuItem
-      id="misc"
-      label={i18n.misc}
-    ></Menu.MenuItem>
-  </Menu.default>
+  return (
+    <Menu.default
+      onClose={closeContextMenu}
+      navId="DrApi-context-menu"
+    >
+      <Menu.MenuItem
+        id="settings"
+        label={i18n.settings}
+      ></Menu.MenuItem>
+      <Menu.MenuSeparator />
+      <Menu.MenuItem
+        id="misc"
+        label={i18n.misc}
+      ></Menu.MenuItem>
+    </Menu.default>
+  )
 })
 
 export default React.memo(() => {
@@ -40,6 +45,8 @@ export default React.memo(() => {
         </svg>
       )}
       tooltipText={i18n.name}
+      onContextMenu={(evt:any) => openContextMenu(evt, () => <Context />)}
+      onClick={() => Modal.openModal((mProps:any) => <SettingsModal mProps={mProps} PAGE={0}/>)}
     />
   )
 })

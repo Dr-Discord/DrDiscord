@@ -1,23 +1,14 @@
 import { React } from "../React"
 
-export class MonacoEditor extends React.Component {
-  constructor(props: any) {
-    super(props)
-    this.state = { error: false }
-    this.myRef = React.createRef()
-  }
-  
-  componentDidMount() {
-    const propKeys = Object.keys(this.props).filter(key => key !== "didMount")
+export default React.memo((prop:any) => {
+  const ref = React.useRef()
+  React.useEffect(() => {
+    const propKeys = Object.keys(prop).filter(key => key !== "didMount")
     const props:any = {}
-    for (const propKey of propKeys) props[propKey] = this.props[propKey]
-    this.editor = window.monaco.editor.create(this.myRef.current, props)
-    this.props.didMount?.(this.editor)
-  }
+    for (const propKey of propKeys) props[propKey] = props[propKey]
+    const editor = window.monaco.editor.create(ref.current, props)
+    props.didMount?.(editor)
+  })
 
-  render() {
-    return <div ref={this.myRef} style={{ width: "100%",  height: "100%" }}/>
-  }
-}
-
-export default MonacoEditor
+  return <div ref={ref} style={{ width: "100%",  height: "100%" }}/>
+})

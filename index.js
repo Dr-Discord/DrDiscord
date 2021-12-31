@@ -11,6 +11,7 @@ class BrowserWindow extends electron.BrowserWindow {
     if (opt.title != "Discord") return super(opt)
     
     const win = new electron.BrowserWindow(opt)
+    
     win.webContents.executeJavaScript(`(${async () => {
       // Remove devtools callbacks
       await DiscordNative.window.setDevtoolsCallbacks(null, null)
