@@ -24,6 +24,40 @@ export default {
   prompt: async (title:string, opts:any = {}):Promise<string | null> => {
     const { defaultValue = "", type = "input", options = [], ...other } = opts
     let toReturn = defaultValue
+    const Content = React.memo(() => {
+      const [value, setValue] = React.useState(defaultValue)
+      if (type.toLowerCase() === "input") return (
+        <TextInput 
+          {...other}
+          value={value}
+          onInput={(ele:any) => {
+            setValue(ele.target.value)
+            toReturn = ele.target.value
+          }}
+        />
+      )
+      if (type.toLowerCase() === "textarea") return (
+        <TextArea 
+          {...other}
+          value={value}
+          onChange={(val:any) => {
+            setValue(val)
+            toReturn = val
+          }}
+        />
+      )
+      if (type.toLowerCase() === "dropdown") return (
+        <SingleSelect 
+          {...other}
+          value={value}
+          options={options}
+          onChange={(val:any) => {
+            setValue(val)
+            toReturn = val
+          }}
+        />
+      )
+    })
     return new Promise((resolve) => {
       openModal((props:any) => {
         if (props.transitionState === 2) resolve(null)
@@ -36,44 +70,7 @@ export default {
             onConfirm={() => resolve(toReturn)}
             onCancel={() => resolve(null)}
             {...props}
-          >
-            {
-              React.createElement(React.memo(() => {
-                const [value, setValue] = React.useState(defaultValue)
-                if (type.toLowerCase() === "input") return (
-                  <TextInput 
-                    {...other}
-                    value={value}
-                    onInput={(ele:any) => {
-                      setValue(ele.target.value)
-                      toReturn = ele.target.value
-                    }}
-                  />
-                )
-                if (type.toLowerCase() === "textarea") return (
-                  <TextArea 
-                    {...other}
-                    value={value}
-                    onChange={(val:any) => {
-                      setValue(val)
-                      toReturn = val
-                    }}
-                  />
-                )
-                if (type.toLowerCase() === "dropdown") return (
-                  <SingleSelect 
-                    {...other}
-                    value={value}
-                    options={options}
-                    onChange={(val:any) => {
-                      setValue(val)
-                      toReturn = val
-                    }}
-                  />
-                )
-              }))
-            }
-          </ConfirmationModal>
+          ><Content /></ConfirmationModal>
         )
       })
     })

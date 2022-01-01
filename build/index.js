@@ -29,12 +29,12 @@
         pluginStorage;
         internalStorage;
         constructor() {
-          this.pluginStorage = exports.localStorage.getItem("DrPluginStorage") || {};
-          this.internalStorage = exports.localStorage.getItem("DrInternalStorage") || {};
+          this.pluginStorage = JSON.parse(exports.localStorage.getItem("DrPluginStorage")) || {};
+          this.internalStorage = JSON.parse(exports.localStorage.getItem("DrInternalStorage")) || {};
         }
         getInternalData(key, defVal = null) {
           let data = this.internalStorage[key];
-          return data === null ? defVal : data;
+          return data === void 0 ? defVal : data;
         }
         setInternalData(key, value) {
           const data = this.internalStorage;
@@ -189,28 +189,29 @@
         prompt: async (title, opts = {}) => {
           const { defaultValue = "", type = "input", options = [], ...other } = opts;
           let toReturn = defaultValue;
+          const Content = React_1.React.memo(() => {
+            const [value, setValue] = React_1.React.useState(defaultValue);
+            if (type.toLowerCase() === "input")
+              return React_1.React.createElement(TextInput, { ...other, value, onInput: (ele) => {
+                setValue(ele.target.value);
+                toReturn = ele.target.value;
+              } });
+            if (type.toLowerCase() === "textarea")
+              return React_1.React.createElement(TextArea, { ...other, value, onChange: (val) => {
+                setValue(val);
+                toReturn = val;
+              } });
+            if (type.toLowerCase() === "dropdown")
+              return React_1.React.createElement(SingleSelect, { ...other, value, options, onChange: (val) => {
+                setValue(val);
+                toReturn = val;
+              } });
+          });
           return new Promise((resolve) => {
             openModal((props) => {
               if (props.transitionState === 2)
                 resolve(null);
-              return React_1.React.createElement(ConfirmationModal, { header: title, confirmButtonColor: Button.ButtonColors.BRAND, confirmText: Messages.OKAY, cancelText: Messages.CANCEL, onConfirm: () => resolve(toReturn), onCancel: () => resolve(null), ...props }, React_1.React.createElement(React_1.React.memo(() => {
-                const [value, setValue] = React_1.React.useState(defaultValue);
-                if (type.toLowerCase() === "input")
-                  return React_1.React.createElement(TextInput, { ...other, value, onInput: (ele) => {
-                    setValue(ele.target.value);
-                    toReturn = ele.target.value;
-                  } });
-                if (type.toLowerCase() === "textarea")
-                  return React_1.React.createElement(TextArea, { ...other, value, onChange: (val) => {
-                    setValue(val);
-                    toReturn = val;
-                  } });
-                if (type.toLowerCase() === "dropdown")
-                  return React_1.React.createElement(SingleSelect, { ...other, value, options, onChange: (val) => {
-                    setValue(val);
-                    toReturn = val;
-                  } });
-              })));
+              return React_1.React.createElement(ConfirmationModal, { header: title, confirmButtonColor: Button.ButtonColors.BRAND, confirmText: Messages.OKAY, cancelText: Messages.CANCEL, onConfirm: () => resolve(toReturn), onCancel: () => resolve(null), ...props }, React_1.React.createElement(Content, null));
             });
           });
         },
@@ -338,7 +339,9 @@
         },
         en: {
           settings: "Settings",
-          misc: "Misc"
+          misc: "Misc",
+          banWarnNote: "Warning you can get banned if you arent careful!",
+          enDevMode: "Enable Discord Developer Mode"
         }
       };
       var i18n = new Proxy(exports.languages[navigator.language.split("-", 1)[0]], {
@@ -471,16 +474,39 @@
       var Text = byDisplayName("Text");
       var FormTitle = byDisplayName("FormTitle");
       var TabBar = byDisplayName("TabBar");
+      var SwitchItem = byDisplayName("SwitchItem");
       var Tabs = React_1.React.memo((props) => {
         const { page, setPage } = props;
         return React_1.React.createElement(TabBar, { selectedItem: page, onItemSelect: (e) => {
           setPage(e);
         }, className: "Dr-Settings-TabBar" }, React_1.React.createElement(TabBar.Item, { id: 0 }, React_1.React.createElement(Icons.Settings, null)), React_1.React.createElement(TabBar.Item, { id: 1 }, React_1.React.createElement(Icons.Themes, null)), React_1.React.createElement(TabBar.Item, { id: 2 }, React_1.React.createElement(Icons.Plugins, null)));
       });
+      var Collapsable = React_1.React.memo((props) => {
+        const { title, children } = props;
+        const [isOpen, setOpen] = React_1.React.useState(false);
+        const ref = React_1.React.useRef();
+        React_1.React.useEffect(() => {
+          window.ref = ref.current;
+          ref.offsetHeight;
+        });
+        return React_1.React.createElement("div", { className: `Dr-Settings-Collapsable${isOpen ? " Open" : ""}` }, React_1.React.createElement("div", { className: "Dr-Settings-Collapsable-Title-Wrapper", onClick: () => {
+          setOpen(!isOpen);
+        } }, React_1.React.createElement(Text, { className: "Dr-Settings-Collapsable-Title" }, title)), React_1.React.createElement("div", { className: "Dr-Settings-Collapsable-Children-Wrapper", style: {
+          height: isOpen ? "auto" : 0,
+          overflow: "hidden"
+        } }, React_1.React.createElement("div", { className: "Dr-Settings-Collapsable-Children", ref }, children)));
+      });
+      var General = React_1.React.memo((props) => {
+        const [isDeveloper, setIsDeveloper] = React_1.React.useState($Dr.isDeveloper);
+        return React_1.React.createElement(React_1.React.Fragment, null, React_1.React.createElement(Collapsable, { title: "General" }, React_1.React.createElement(SwitchItem, { note: i18n_1.default.banWarnNote, value: isDeveloper, onChange: (e) => {
+          setIsDeveloper(e);
+          $Dr.isDeveloper = e;
+        } }, i18n_1.default.enDevMode)));
+      });
       var SettingsPage = React_1.React.memo((props) => {
         const { mProps, PAGE, reactElement } = props;
         const [page, setPage] = React_1.React.useState(PAGE);
-        return React_1.React.createElement(MEs.ModalRoot, { ...mProps, className: "Dr-Settings-Modal", size: MEs.ModalSize.LARGE }, React_1.React.createElement(MEs.ModalHeader, { separator: false }, React_1.React.createElement(Flex, null, React_1.React.createElement(Flex.Child, null, React_1.React.createElement(Flex.Child, null, React_1.React.createElement(FormTitle, { tag: "h4" }, i18n_1.default.name)), React_1.React.createElement(Text, null, "v", i18n_1.default.vers), React_1.React.createElement(Flex.Child, null)), React_1.React.createElement(Flex.Child, null, React_1.React.createElement(Tabs, { page, setPage })), React_1.React.createElement(Flex.Child, null, React_1.React.createElement(MEs.ModalCloseButton, { onClick: mProps.onClose })))), React_1.React.createElement(MEs.ModalContent, null, "Test"));
+        return React_1.React.createElement(MEs.ModalRoot, { ...mProps, className: "Dr-Settings-Modal", size: MEs.ModalSize.LARGE }, React_1.React.createElement(MEs.ModalHeader, { separator: false }, React_1.React.createElement(Flex, null, React_1.React.createElement(Flex.Child, null, React_1.React.createElement(Flex.Child, null, React_1.React.createElement(FormTitle, { tag: "h4" }, i18n_1.default.name)), React_1.React.createElement(Text, null, "v", i18n_1.default.vers), React_1.React.createElement(Flex.Child, null)), React_1.React.createElement(Flex.Child, null, React_1.React.createElement(Tabs, { page, setPage })), React_1.React.createElement(Flex.Child, null, React_1.React.createElement(MEs.ModalCloseButton, { onClick: mProps.onClose })))), React_1.React.createElement(MEs.ModalContent, null, page == 0 ? React_1.React.createElement(General, null) : page == 1 ? "1" : page == 2 ? "2" : "3"));
       });
       var openSettings = (PAGE = 0, reactElement) => openModal((mProps) => React_1.React.createElement(SettingsPage, { mProps, PAGE, reactElement }));
       exports.openSettings = openSettings;
@@ -552,14 +578,14 @@
         insert: (id, content) => {
           const Style = Object.assign(document.createElement("style"), {
             type: "text/css",
-            id,
             innerHTML: content
           });
+          Style.setAttribute("Dr-Theme-Style", id);
           DrThemes.appendChild(Style);
           return () => Style.remove();
         },
         clear: (id) => {
-          const Style = document.getElementById(id);
+          const Style = document.querySelector(`[Dr-Theme-Style="${id}"]`);
           if (Style)
             Style.remove();
         }
@@ -568,14 +594,14 @@
         insert: (id, content) => {
           const Style = Object.assign(document.createElement("style"), {
             type: "text/css",
-            id,
             innerHTML: content
           });
+          Style.setAttribute("Dr-Plugin-Style", id);
           DrPlugins.appendChild(Style);
           return () => Style.remove();
         },
         clear: (id) => {
-          const Style = document.getElementById(id);
+          const Style = document.querySelector(`[Dr-Plugin-Style="${id}"]`);
           if (Style)
             Style.remove();
         }
@@ -584,14 +610,14 @@
         insert: (id, content) => {
           const Style = Object.assign(document.createElement("style"), {
             type: "text/css",
-            id,
             innerHTML: content
           });
+          Style.setAttribute("Dr-Internal-Style", id);
           DrInternal.appendChild(Style);
           return () => Style.remove();
         },
         clear: (id) => {
-          const Style = document.getElementById(id);
+          const Style = document.querySelector(`[Dr-Internal-Style="${id}"]`);
           if (Style)
             Style.remove();
         }
@@ -646,6 +672,7 @@
       var MonacoEditor_1 = __importDefault(require_MonacoEditor());
       var stylingApi_1 = require_stylingApi();
       var SettingsModal_1 = require_SettingsModal();
+      var isDeveloper = Storage_1.InternalStorageApi.getData("isDeveloper", false);
       window.$Dr = {
         localStorage: Storage_1.localStorage,
         StorageApi: Storage_1.StorageApi,
@@ -660,6 +687,13 @@
         MonacoEditor: MonacoEditor_1.default,
         openSettingsModal: SettingsModal_1.openSettings
       };
+      Object.defineProperty(window.$Dr, "isDeveloper", {
+        get: () => isDeveloper,
+        set: (value) => {
+          isDeveloper = value;
+          Storage_1.InternalStorageApi.setData("isDeveloper", value);
+        }
+      });
       window.DrApi = {
         Storage: Storage_1.StorageApi,
         getModule: getModule_1.default,
@@ -685,6 +719,18 @@
   width: 16px;
   height: 16px;
   transform: translateY(2px)
+} .Dr-Settings-Collapsable {
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+}.Dr-Settings-Collapsable-Title-Wrapper  {
+  cursor: pointer;
+  padding: 8px;
+  background-color: var(--background-tertiary);
+  border-radius: 4px;
+} .Dr-Settings-Collapsable-Children {
+  padding: 8px;
+  border-radius: 0 0 4px 4px;
 }`);
       async function start() {
         const eleOI = Util.getOwnerInstance(await Util.waitFor(".panels-j1Uci_ > .container-3baos1"));
@@ -692,6 +738,13 @@
           res.props.children[res.props.children.length - 1].props.children.unshift(React_1.React.createElement(PanelButton_1.default, null));
         });
         eleOI.forceUpdate();
+        Object.defineProperty((0, getModule_1.default)(["isDeveloper"]), "isDeveloper", {
+          get: () => isDeveloper,
+          set: (value) => {
+            isDeveloper = value;
+            Storage_1.InternalStorageApi.setData("isDeveloper", value);
+          }
+        });
       }
       start();
     }

@@ -9,7 +9,9 @@ export const languages:any = {
   },
   en: {
     settings: "Settings",
-    misc: "Misc"
+    misc: "Misc",
+    banWarnNote: "Warning you can get banned if you arent careful!",
+    enDevMode: "Enable Discord Developer Mode",
   }
 }
 

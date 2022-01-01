@@ -18,12 +18,12 @@ const storage = new class {
   pluginStorage: any
   internalStorage: any
   constructor() {
-    this.pluginStorage = (localStorage.getItem("DrPluginStorage") || {})
-    this.internalStorage = (localStorage.getItem("DrInternalStorage") || {})
+    this.pluginStorage = (JSON.parse(localStorage.getItem("DrPluginStorage")) || {})
+    this.internalStorage = (JSON.parse(localStorage.getItem("DrInternalStorage")) || {})
   }
   getInternalData(key:string, defVal:any = null) {
     let data = this.internalStorage[key]
-    return data === null ? defVal : data
+    return data === undefined ? defVal : data
   }
   setInternalData(key:string, value:any) {
     const data = this.internalStorage

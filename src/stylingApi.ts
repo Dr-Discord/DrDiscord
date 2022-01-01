@@ -11,13 +11,14 @@ export const Themes = {
   insert: (id:string, content:string):Function => {
     const Style = Object.assign(document.createElement("style"), {
       type: "text/css",
-      id, innerHTML: content
+      innerHTML: content
     })
+    Style.setAttribute("Dr-Theme-Style", id)
     DrThemes.appendChild(Style)
     return () => Style.remove()
   },
   clear: (id:string):void => {
-    const Style = document.getElementById(id)
+    const Style = document.querySelector(`[Dr-Theme-Style="${id}"]`)
     if (Style) Style.remove()
   }
 }
@@ -26,13 +27,14 @@ export const Plugins = {
   insert: (id:string, content:string):Function => {
     const Style = Object.assign(document.createElement("style"), {
       type: "text/css",
-      id, innerHTML: content
+      innerHTML: content
     })
+    Style.setAttribute("Dr-Plugin-Style", id)
     DrPlugins.appendChild(Style)
     return () => Style.remove()
   },
   clear: (id:string):void => {
-    const Style = document.getElementById(id)
+    const Style = document.querySelector(`[Dr-Plugin-Style="${id}"]`)
     if (Style) Style.remove()
   }
 }
@@ -41,13 +43,14 @@ export const Internal = {
   insert: (id:string, content:string):Function => {
     const Style = Object.assign(document.createElement("style"), {
       type: "text/css",
-      id, innerHTML: content
+      innerHTML: content
     })
+    Style.setAttribute("Dr-Internal-Style", id)
     DrInternal.appendChild(Style)
     return () => Style.remove()
   },
   clear: (id:string):void => {
-    const Style = document.getElementById(id)
+    const Style = document.querySelector(`[Dr-Internal-Style="${id}"]`)
     if (Style) Style.remove()
   }
 }

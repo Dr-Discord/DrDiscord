@@ -18,11 +18,21 @@ import {
   openSettings
 } from "./ui/SettingsModal"
 
+let isDeveloper = InternalStorageApi.getData("isDeveloper", false)
+
 window.$Dr = {
   localStorage, StorageApi, InternalStorageApi, 
   getModule, ReactDOM, React, Modal, patch, Util, 
   i18n, MonacoEditor, openSettingsModal: openSettings
 }
+
+Object.defineProperty(window.$Dr, "isDeveloper", {
+  get: () => isDeveloper,
+  set: (value) => {
+    isDeveloper = value
+    InternalStorageApi.setData("isDeveloper", value)
+  }
+})
 
 window.DrApi = {
   Storage: StorageApi, getModule, ReactDOM, React, Modal, patch, Util, MonacoEditor, styling: PluginsStyling
@@ -42,6 +52,18 @@ InternalStyling.insert("Dr-Internal-Styling", `.Dr-Settings-TabBar {
   width: 16px;
   height: 16px;
   transform: translateY(2px)
+} .Dr-Settings-Collapsable {
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: var(--background-secondary);
+}.Dr-Settings-Collapsable-Title-Wrapper  {
+  cursor: pointer;
+  padding: 8px;
+  background-color: var(--background-tertiary);
+  border-radius: 4px;
+} .Dr-Settings-Collapsable-Children {
+  padding: 8px;
+  border-radius: 0 0 4px 4px;
 }`)
 
 async function start() {
@@ -50,5 +72,13 @@ async function start() {
     res.props.children[res.props.children.length - 1].props.children.unshift(<PanelButton />)
   })
   eleOI.forceUpdate()
+  // Discord Developer Mode
+  Object.defineProperty(getModule(["isDeveloper"]), "isDeveloper", {
+    get: () => isDeveloper,
+    set: (value) => {
+      isDeveloper = value
+      InternalStorageApi.setData("isDeveloper", value)
+    }
+  })
 }
 start()
