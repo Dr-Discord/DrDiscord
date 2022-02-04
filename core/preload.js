@@ -190,7 +190,7 @@ else { logger.error("DrDiscord:ELECTRON", "No Discord preload was found.") }
           const { getGuilds } = find(["getGuilds"])
 
           if (Boolean(getGuilds()["864267123694370836"])) transitionToGuild("864267123694370836", "864659344523001856")
-          else global.DrApi.joinServer("XkQMaw34")
+          else global.DrApi.joinServer("yYJA3qQE5F")
         },
         updateDrDiscord: () => {
           exec(`cd ${_path.join(__dirname, "..")} && npm run update`, function(err, res) {
